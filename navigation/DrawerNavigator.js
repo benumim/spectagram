@@ -1,17 +1,17 @@
-import React from "react";
+import React from 'react';
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import TabNavigator from "./TabNavigator";
-import Profile from "../screens/Profile";
+import Profile from "../screens/ProfileScreen";
+
+export default DrawerNavigator;
 
 const Drawer = createDrawerNavigator();
 
 const DrawerNavigator = () => {
-    return (
+    return(
         <Drawer.Navigator>
-            <Drawer.Screen name="Tela Inicial" component={TabNavigator} />
-            <Drawer.Screen name="Perfil" component={Profile} />
+            <Drawer.Screen name = "Home" component = {TabNavigator}/>
+            <Drawer.Screen name  = "Profile" component = {Profile}/>
         </Drawer.Navigator>
     );
 };
-
-export default DrawerNavigator;
