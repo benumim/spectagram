@@ -4,6 +4,7 @@ import {
     Text,
     StyleSheet,
     Image,
+    TouchableOpacity,
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { RFValue } from "react-native-responsive-fontsize";
@@ -18,7 +19,7 @@ export default class PostCard extends Component {
 
     render() {
         return (
-            <View style={styles.container}>
+            <TouchableOpacity style={styles.container} onPress={() => this.props.navigation.navigate("PantalladePublicación", post = this.props.post)}>
                 <View style={styles.cardContainer}>
                     <View style={styles.authorContainer}>
                         <View style={styles.authorImageContainer}>
@@ -31,7 +32,7 @@ export default class PostCard extends Component {
                             <Text style={styles.authorNameText}>{this.props.post.author}</Text>
                         </View>
                     </View>
-                    <Image source={require("../assets/post.jpeg")} style={styles.postImage} />
+                    <Image source={require("../assets/image_1.jpg")} style={styles.postImage} />
                     <View style={styles.captionContainer}>
                         <Text style={styles.captionText}>
                             {this.props.post.caption}
@@ -40,11 +41,11 @@ export default class PostCard extends Component {
                     <View style={styles.actionContainer}>
                         <View style={styles.likeButton}>
                             <Ionicons name={"heart"} size={RFValue(30)} color={"white"} />
-                            <Text style={styles.likeText}>12k</Text>
+                            <Text style={styles.likeText}>12m</Text>
                         </View>
                     </View>
                 </View>
-            </View>
+            </TouchableOpacity>
         );
     }
 }

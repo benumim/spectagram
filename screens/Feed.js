@@ -24,7 +24,7 @@ export default class Feed extends Component {
     componentDidMount() { }
 
     renderItem = ({ item: post }) => {
-        return <PostCard post={post} />;
+        return <PostCard post={post} navigation={this.props.navigation} />;
     };
 
     keyExtractor = (item, index) => index.toString();
@@ -41,7 +41,7 @@ export default class Feed extends Component {
                         ></Image>
                     </View>
                     <View style={styles.appTitleTextContainer}>
-                        <Text style={styles.appTitleText}>Espectagrama</Text>
+                        <Text style={styles.appTitleText}>Spectagram</Text>
                     </View>
                 </View>
                 <View style={styles.cardContainer}>
