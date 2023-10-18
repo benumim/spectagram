@@ -1,8 +1,3 @@
-import firebase from "firebase";
-import 'firebase/auth';
-import 'firebase/database';
-import 'firebase/app';
-
 export const firebaseConfig = {
 
   apiKey: "AIzaSyA15VFfqOmcydRNaArG_R7x6PyXECyoYDc",
@@ -20,3 +15,5 @@ export const firebaseConfig = {
   appId: "1:237713322043:web:66186af7e225ad9ba4ac1e"
 
 };
+
+  
