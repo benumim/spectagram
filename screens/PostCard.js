@@ -9,18 +9,35 @@ import {
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { RFValue } from "react-native-responsive-fontsize";
 
+import firebase from "firebase";
+
 export default class PostCard extends Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            light_theme: true
+        };
     }
 
-    componentDidMount() { }
+    componentDidMount() {
+        this.fetchUser();
+    }
+
+    fetchUser = () => {
+        let theme;
+        firebase
+            .database()
+            .ref("/users/" + firebase.auth().currentUser.uid)
+            .on("value", (snapshot) => {
+                theme = snapshot.val().current_theme
+                this.setState({ light_theme: theme === "light" })
+            })
+    }
 
     render() {
         return (
             <TouchableOpacity style={styles.container} onPress={() => this.props.navigation.navigate("PostScreen", post = this.props.post)}>
-                <View style={styles.cardContainer}>
+                <View style={this.state.light_theme ? styles.cardContainerLight : styles.cardContainer}>
                     <View style={styles.authorContainer}>
                         <View style={styles.authorImageContainer}>
                             <Image
@@ -29,12 +46,12 @@ export default class PostCard extends Component {
                             ></Image>
                         </View>
                         <View style={styles.authorNameContainer}>
-                            <Text style={styles.authorNameText}>{this.props.post.author}</Text>
+                            <Text style={this.state.light_theme ? styles.authorNameTextLight : styles.authorNameText}>{this.props.post.author}</Text>
                         </View>
                     </View>
                     <Image source={require("../assets/image_1.jpg")} style={styles.postImage} />
                     <View style={styles.captionContainer}>
-                        <Text style={styles.captionText}>
+                        <Text style={this.state.light_theme ? styles.captionTextLight : styles.captionText}>
                             {this.props.post.caption}
                         </Text>
                     </View>
@@ -60,6 +77,21 @@ const styles = StyleSheet.create({
         borderRadius: RFValue(20),
         padding: RFValue(20)
     },
+    cardContainerLight: {
+        margin: RFValue(13),
+
+        backgroundColor: "white",
+        borderRadius: RFValue(20),
+        shadowColor: "rgb(0, 0, 0)",
+        shadowOffset: {
+            width: 3,
+            height: 3
+        },
+        shadowOpacity: RFValue(0.5),
+        shadowRadius: RFValue(5),
+        elevation: RFValue(2),
+        padding: RFValue(20)
+    },
     authorContainer: {
         flex: 0.1,
         flexDirection: "row"
@@ -83,6 +115,10 @@ const styles = StyleSheet.create({
         color: "white",
         fontSize: RFValue(20)
     },
+    authorNameTextLight: {
+        color: "black",
+        fontSize: RFValue(20)
+    },
     postImage: {
         marginTop: RFValue(20),
         resizeMode: "contain",
@@ -94,6 +130,11 @@ const styles = StyleSheet.create({
     captionText: {
         fontSize: 13,
         color: "white",
+        paddingTop: RFValue(10)
+    },
+    captionTextLight: {
+        fontSize: 13,
+        color: "black",
         paddingTop: RFValue(10)
     },
     actionContainer: {

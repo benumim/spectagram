@@ -14,14 +14,29 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
+import firebase from "firebase";
+
 export default class PostScreen extends Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            light_theme: true
+        };
     }
 
     componentDidMount() {
+        this.fetchUser();
+    }
 
+    fetchUser = () => {
+        let theme;
+        firebase
+            .database()
+            .ref("/users/" + firebase.auth().currentUser.uid)
+            .on("value", (snapshot) => {
+                theme = snapshot.val().current_theme
+                this.setState({ light_theme: theme === "light" })
+            })
     }
 
     render() {
@@ -29,7 +44,7 @@ export default class PostScreen extends Component {
             this.props.navigation.navigate("Home");
         } else {
             return (
-                <View style={styles.container}>
+                <View style={this.state.light_theme ? styles.containerLight : styles.container}>
                     <SafeAreaView style={styles.droidSafeArea} />
                     <View style={styles.appTitle}>
                         <View style={styles.appIcon}>
@@ -39,11 +54,11 @@ export default class PostScreen extends Component {
                             ></Image>
                         </View>
                         <View style={styles.appTitleTextContainer}>
-                            <Text style={styles.appTitleText}>Spectagram</Text>
+                            <Text style={this.state.light_theme ? styles.appTitleTextLight : styles.appTitleText}>Spectagram</Text>
                         </View>
                     </View>
                     <View style={styles.postContainer}>
-                        <ScrollView style={styles.postCard}>
+                        <ScrollView style={this.state.light_theme ? styles.postCardLight : styles.postCard}>
                             <View style={styles.authorContainer}>
                                 <View style={styles.authorImageContainer}>
                                     <Image
@@ -52,12 +67,12 @@ export default class PostScreen extends Component {
                                     ></Image>
                                 </View>
                                 <View style={styles.authorNameContainer}>
-                                    <Text style={styles.authorNameText}>{this.props.route.params.author}</Text>
+                                    <Text style={this.state.light_theme ? styles.authorNameTextLight : styles.authorNameText}>{this.props.route.params.author}</Text>
                                 </View>
                             </View>
                             <Image source={require("../assets/image_1.jpg")} style={styles.postImage} />
                             <View style={styles.captionContainer}>
-                                <Text style={styles.captionText}>
+                                <Text style={this.state.light_theme ? styles.captionTextLight : styles.captionText}>
                                     {this.props.route.params.caption}
                                 </Text>
                             </View>
@@ -79,6 +94,10 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: "black"
+    },
+    containerLight: {
+        flex: 1,
+        backgroundColor: "white"
     },
     droidSafeArea: {
         marginTop: Platform.OS === "android" ? StatusBar.currentHeight : RFValue(35)
@@ -105,12 +124,21 @@ const styles = StyleSheet.create({
         color: "white",
         fontSize: RFValue(28)
     },
+    appTitleTextLight: {
+        color: "black",
+        fontSize: RFValue(28),
+    },
     postContainer: {
         flex: 1
     },
     postCard: {
         margin: RFValue(20),
         backgroundColor: "#2a2a2a",
+        borderRadius: RFValue(20)
+    },
+    postCardLight: {
+        margin: RFValue(20),
+        backgroundColor: "#eaeaea",
         borderRadius: RFValue(20)
     },
     actionContainer: {
@@ -157,6 +185,10 @@ const styles = StyleSheet.create({
         color: "white",
         fontSize: RFValue(20)
     },
+    authorNameTextLight: {
+        color: "black",
+        fontSize: RFValue(20)
+    },
     postImage: {
         width: "100%",
         alignSelf: "center",
@@ -171,6 +203,11 @@ const styles = StyleSheet.create({
     captionText: {
         fontSize: 13,
         color: "white",
+        paddingTop: RFValue(10)
+    },
+    captionTextLight: {
+        fontSize: 13,
+        color: "black",
         paddingTop: RFValue(10)
     },
 });

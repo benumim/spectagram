@@ -13,15 +13,32 @@ import PostCard from "./PostCard";
 
 import { FlatList } from "react-native-gesture-handler";
 
+import firebase from "firebase";
+
 let posts = require("./temp_posts.json");
 
 export default class Feed extends Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            light_theme: true
+        };
     }
 
-    componentDidMount() { }
+    fetchUser = () => {
+        let theme;
+        firebase
+            .database()
+            .ref("/users/" + firebase.auth().currentUser.uid)
+            .on("value", (snapshot) => {
+                theme = snapshot.val().current_theme
+                this.setState({ light_theme: theme === "light" })
+            })
+    }
+
+    componentDidMount() {
+        this.fetchUser();
+    }
 
     renderItem = ({ item: post }) => {
         return <PostCard post={post} navigation={this.props.navigation} />;
@@ -31,7 +48,7 @@ export default class Feed extends Component {
 
     render() {
         return (
-            <View style={styles.container}>
+            <View style={this.state.light_theme ? styles.containerLight : styles.container}>
                 <SafeAreaView style={styles.droidSafeArea} />
                 <View style={styles.appTitle}>
                     <View style={styles.appIcon}>
@@ -41,7 +58,7 @@ export default class Feed extends Component {
                         ></Image>
                     </View>
                     <View style={styles.appTitleTextContainer}>
-                        <Text style={styles.appTitleText}>Spectagram</Text>
+                        <Text style={this.state.light_theme ? styles.appTitleTextLight : styles.appTitleText}>Spectagram</Text>
                     </View>
                 </View>
                 <View style={styles.cardContainer}>
@@ -60,6 +77,10 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: "black"
+    },
+    containerLight: {
+        flex: 1,
+        backgroundColor: "white"
     },
     droidSafeArea: {
         marginTop: Platform.OS === "android" ? StatusBar.currentHeight : RFValue(35)
@@ -85,6 +106,10 @@ const styles = StyleSheet.create({
     appTitleText: {
         color: "white",
         fontSize: RFValue(28),
+    },
+    appTitleTextLight: {
+        color: "black",
+        fontSize: RFValue(28)
     },
     cardContainer: {
         flex: 0.85
