@@ -15,7 +15,9 @@ export default class PostCard extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            light_theme: true
+            light_theme: true,
+            post_id: this.props.post.key,
+            post_data: this.props.post.value
         };
     }
 
@@ -35,24 +37,34 @@ export default class PostCard extends Component {
     }
 
     render() {
+        let post = this.state.post_data
+        let images = {
+            image_1: require("../assets/image_1.jpg"),
+            image_2: require("../assets/image_2.jpg"),
+            image_3: require("../assets/image_3.jpg"),
+            image_4: require("../assets/image_4.jpg"),
+            image_5: require("../assets/image_5.jpg"),
+            image_6: require("../assets/image_6.jpg"),
+            image_7: require("../assets/image_7.jpg")
+        };
         return (
             <TouchableOpacity style={styles.container} onPress={() => this.props.navigation.navigate("PostScreen", post = this.props.post)}>
                 <View style={this.state.light_theme ? styles.cardContainerLight : styles.cardContainer}>
                     <View style={styles.authorContainer}>
                         <View style={styles.authorImageContainer}>
                             <Image
-                                source={require("../assets/profile_img.png")}
+                                source={{ uri: post.profile_image }}
                                 style={styles.profileImage}
                             ></Image>
                         </View>
                         <View style={styles.authorNameContainer}>
-                            <Text style={this.state.light_theme ? styles.authorNameTextLight : styles.authorNameText}>{this.props.post.author}</Text>
+                            <Text style={this.state.light_theme ? styles.authorNameTextLight : styles.authorNameText}>{post.author}</Text>
                         </View>
                     </View>
-                    <Image source={require("../assets/image_1.jpg")} style={styles.postImage} />
+                    <Image source={images[post.preview_image]} style={styles.postImage} />
                     <View style={styles.captionContainer}>
                         <Text style={this.state.light_theme ? styles.captionTextLight : styles.captionText}>
-                            {this.props.post.caption}
+                            {post.caption}
                         </Text>
                     </View>
                     <View style={styles.actionContainer}>

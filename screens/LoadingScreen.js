@@ -1,28 +1,37 @@
-import React, { Component } from 'react';
-import { ActivityIndicator, View } from 'react-native';
-import firebase from 'firebase';
+import React, { Component } from "react";
+import {
+    View,
+    ActivityIndicator
+} from "react-native";
+import firebase from "firebase";
 
-export default class LoadingScreen extends Component{
-  componentDidMount(){
-    this.checkIfLogedIn();
-  }
+export default class LoadingScreen extends Component {
 
-  checkIfLogedIn = () =>{
-    firebase.auth().onAuthStateChanged((user) => {
-      if(user){
-        this.props.navigation.navigate("DashboardScreen");
-      }
-      else {
-        this.props.navigation.navigate("LoginScreen");
-      }
-    })
-  }
+    componentDidMount() {
+        this.checkIfLoggedIn()
+    }
 
-  render(){
-    return(
-      <View style = {{justifyContent: 'center', alignItems: 'center', flex: 1}}>
-        <ActivityIndicator size = "large"/>
-      </View>
-    );
-  }
+    checkIfLoggedIn = () => {
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                this.props.navigation.navigate('DashboardScreen')
+            } else {
+                this.props.navigation.navigate('LoginScreen')
+            }
+        })
+    }
+
+    render() {
+        return (
+            <View
+                style={{
+                    flex: 1,
+                    justifyContent: "center",
+                    alignItems: "center"
+                }}
+            >
+                <ActivityIndicator size="large" />
+            </View>
+        )
+    }
 }
