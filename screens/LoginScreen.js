@@ -6,8 +6,8 @@ import {
     SafeAreaView,
     Platform,
     StatusBar,
-    Image,
-    TouchableOpacity
+    TouchableOpacity,
+    Image
 } from "react-native";
 import { RFValue } from "react-native-responsive-fontsize";
 
